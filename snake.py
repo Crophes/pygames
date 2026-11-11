@@ -4,14 +4,12 @@ from enum import Enum
 from collections import namedtuple
 
 pygame.init()
-# font = pygame.font.SysFont("arial", 25)
 
 class Direction(Enum):
     RIGHT = 1
     LEFT = 2
     UP = 3
     DOWN = 4
-
 
 Point = namedtuple("Point", "x, y")
 
@@ -51,7 +49,6 @@ class SnakeGame:
             Point(self.head.x - (2 * BLOCK_SIZE), self.head.y),
         ]
         self.left, self.right, self.up, self.down = True,True,True,True
-
 
         self.score = 0
         self._place_food()
@@ -94,12 +91,11 @@ class SnakeGame:
         game_over = False
         if self._is_collision():
             game_over = True
-            return game_over, self.score
+            return game_over
 
         # place new food or just move
         if self.head == self.food:
             self.score += 1
-            # self.speed += 0.2
             self._place_food()
         else:
             self.snake.pop()
@@ -109,14 +105,14 @@ class SnakeGame:
         self.clock.tick(self.speed)
 
         # win condition
-        max_score = (WINDOW_WIDTH*  WINDOW_HEIGHT)//BLOCK_SIZE**2
-        win_score = max_score - 4
-        if self.score == win_score:
+        max_size = (WINDOW_WIDTH*  WINDOW_HEIGHT)//BLOCK_SIZE**2
+        win_size = max_size - 4
+        if self.score == win_size:
             game_over=True
-            return game_over, self.score
+            return game_over
 
-        # return game over and score
-        return game_over, self.score
+        # return game over
+        return game_over
 
     def _is_collision(self):
         # hits boundary
@@ -202,11 +198,10 @@ if __name__ == "__main__":
 
     # game loop
     while True:
-        game_over, score = game.play_step()
+        game_over = game.play_step()
 
         if game_over == True:
+            pygame.time.wait(100)
             break
-
-    print("Final Score", score)
 
     pygame.quit()
